@@ -1,16 +1,33 @@
-# React + Vite
+# BuildX Frontend (Vite + React 19 + TypeScript)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+This is the Single Page Application (SPA) client for **BuildX (ApprovalOS)**, developed for **Smart India Hackathon (SIH 26130)**.
 
-Currently, two official plugins are available:
+For complete system architecture, module specifications, statutory legal citations, and demo scripts, refer to the [Root README](../README.md).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Quick Start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+# Install dependencies
+npm install
 
-## Expanding the Oxlint configuration
+# Run the local development server (Vite)
+npm run dev
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+# Run code linter
+npm run lint
+
+# Build production bundle
+npm run build
+```
+
+---
+
+## 🧩 Key Directory Layout
+
+- `src/pages/entrepreneur/`: Business profile, declarative rule intelligence, interactive React Flow DAG roadmap, application builder, and document vault.
+- `src/pages/government/`: Officer scrutiny desk, triage queue, side-by-side discrepancy matrix, inspection scheduler, and SLA analytics.
+- `src/lib/prevalidation/`: 3-Level automated document pre-validation and consistency engine.
+- `src/lib/approval-graph.ts`: Topological graph nodes, prerequisite edges, and critical path computation.
+- `src/lib/store.tsx`: State management engine synchronized with LocalStorage and demo seed records.
