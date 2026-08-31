@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/lib/use-app-store';
-import { Building2, ShieldCheck, ArrowRight, CheckCircle2, X } from 'lucide-react';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { Building2, ShieldCheck, ArrowRight, CheckCircle2, X, AlertCircle } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -13,6 +14,8 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
   const navigate = useNavigate();
   const { setPersona, business } = useAppStore();
   const [selectedRole, setSelectedRole] = useState<'ENTREPRENEUR' | 'OFFICER' | null>(null);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -28,6 +31,40 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
     setPersona('persona_officer');
     onClose();
     navigate('/government/dashboard');
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoadingGoogle(true);
+      setAuthError(null);
+
+      if (!isSupabaseConfigured()) {
+        throw new Error(
+          'Supabase credentials are not yet configured in frontend/.env.local.'
+        );
+      }
+
+      const redirectUrl = `${window.location.origin}/dashboard`;
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: redirectUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      });
+
+      if (error) {
+        setAuthError(error.message);
+        setLoadingGoogle(false);
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to initiate Google authentication.';
+      setAuthError(message);
+      setLoadingGoogle(false);
+    }
   };
 
   return (
@@ -175,23 +212,94 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
 
         {/* Modal Body */}
         <div style={{ padding: '20px 24px 24px' }}>
+          {authError && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '8px',
+                padding: '10px 12px',
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                borderRadius: '6px',
+                color: '#b91c1c',
+                fontSize: '12px',
+                marginBottom: '16px',
+                lineHeight: '1.4',
+              }}
+            >
+              <AlertCircle size={15} style={{ flexShrink: 0, marginTop: '2px' }} />
+              <div>{authError}</div>
+            </div>
+          )}
+
           {role === 'ENTREPRENEUR' ? (
             <div>
+              {/* Google OAuth Button */}
+              <button
+                onClick={handleGoogleSignIn}
+                disabled={loadingGoogle}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  width: '100%',
+                  padding: '11px 16px',
+                  background: '#ffffff',
+                  color: '#1f2937',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '8px',
+                  fontSize: '13.5px',
+                  fontWeight: 600,
+                  cursor: loadingGoogle ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                  marginBottom: '14px',
+                  transition: 'all 0.15s',
+                  opacity: loadingGoogle ? 0.7 : 1,
+                }}
+                onMouseOver={(e) => ((e.currentTarget as HTMLElement).style.background = '#f8fafc')}
+                onMouseOut={(e) => ((e.currentTarget as HTMLElement).style.background = '#ffffff')}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
+                  <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                </svg>
+                <span>{loadingGoogle ? 'Connecting to Google OAuth...' : 'Continue with Google'}</span>
+              </button>
+
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  margin: '12px 0 16px',
+                  color: '#94a3b8',
+                  fontSize: '12px',
+                }}
+              >
+                <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
+                <span>or explore with demo entity</span>
+                <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
+              </div>
+
               {/* Profile Card */}
               <div
                 style={{
                   background: '#f8fafc',
                   border: '1px solid #e2e8f0',
                   borderRadius: '8px',
-                  padding: '16px',
-                  marginBottom: '20px',
+                  padding: '14px',
+                  marginBottom: '16px',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
                   <div
                     style={{
-                      width: '40px',
-                      height: '40px',
+                      width: '36px',
+                      height: '36px',
                       borderRadius: '50%',
                       background: '#eff6ff',
                       color: '#1d4ed8',
@@ -199,40 +307,36 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontWeight: 700,
-                      fontSize: '14px',
+                      fontSize: '13px',
                       border: '1px solid #bfdbfe',
                     }}
                   >
                     VM
                   </div>
                   <div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a' }}>
+                    <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#0f172a' }}>
                       Vikram Malhotra
                     </div>
-                    <div style={{ fontSize: '12px', color: '#64748b' }}>
+                    <div style={{ fontSize: '11.5px', color: '#64748b' }}>
                       Director · {business.name}
                     </div>
                   </div>
                 </div>
 
-                <div style={{ fontSize: '12px', color: '#475569', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div style={{ fontSize: '11.5px', color: '#475569', display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <CheckCircle2 size={13} color="#15803d" />
+                    <CheckCircle2 size={12} color="#15803d" />
                     <span><strong>Location:</strong> Plot E-45, MIDC Chakan Phase II, Pune</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <CheckCircle2 size={13} color="#15803d" />
-                    <span><strong>Sector:</strong> Logistics / Cold Chain (5,000 MT capacity)</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <CheckCircle2 size={13} color="#15803d" />
-                    <span><strong>Hero Application:</strong> FSSAI Central License (APP-MH-2026-00124)</span>
+                    <CheckCircle2 size={12} color="#15803d" />
+                    <span><strong>Sector:</strong> Logistics / Cold Chain (5,000 MT)</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <button
                   onClick={() => handleEnterEntrepreneur('/dashboard')}
                   style={{
@@ -241,12 +345,12 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
                     justifyContent: 'center',
                     gap: '8px',
                     width: '100%',
-                    padding: '12px 18px',
+                    padding: '11px 16px',
                     background: '#071A33',
                     color: '#ffffff',
                     border: 'none',
                     borderRadius: '8px',
-                    fontSize: '14px',
+                    fontSize: '13.5px',
                     fontWeight: 700,
                     cursor: 'pointer',
                     transition: 'background 0.15s',
@@ -254,7 +358,7 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
                   onMouseOver={(e) => ((e.currentTarget as HTMLElement).style.background = '#0d2545')}
                   onMouseOut={(e) => ((e.currentTarget as HTMLElement).style.background = '#071A33')}
                 >
-                  Enter Entrepreneur Dashboard <ArrowRight size={15} />
+                  Enter Entrepreneur Dashboard <ArrowRight size={14} />
                 </button>
 
                 <button
@@ -265,12 +369,12 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
                     justifyContent: 'center',
                     gap: '8px',
                     width: '100%',
-                    padding: '10px 18px',
+                    padding: '9px 16px',
                     background: '#ffffff',
                     color: '#071A33',
                     border: '1px solid #cbd5e1',
                     borderRadius: '8px',
-                    fontSize: '13px',
+                    fontSize: '12.5px',
                     fontWeight: 600,
                     cursor: 'pointer',
                   }}
@@ -314,7 +418,7 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
                       Rajesh Kumar
                     </div>
                     <div style={{ fontSize: '12px', color: '#64748b' }}>
-                      Designated Officer & Central Licensing Authority
+                      Designated Officer &amp; Central Licensing Authority
                     </div>
                   </div>
                 </div>
@@ -322,7 +426,7 @@ export default function AuthModal({ isOpen, onClose, initialRole = 'ENTREPRENEUR
                 <div style={{ fontSize: '12px', color: '#475569', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <CheckCircle2 size={13} color="#15803d" />
-                    <span><strong>Jurisdiction:</strong> Food Safety & Standards Authority (Western Region)</span>
+                    <span><strong>Jurisdiction:</strong> Food Safety &amp; Standards Authority (Western Region)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <CheckCircle2 size={13} color="#15803d" />

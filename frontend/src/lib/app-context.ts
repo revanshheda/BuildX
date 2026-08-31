@@ -42,6 +42,9 @@ export interface AppContextType {
   notifications: NotificationItem[];
   markNotificationRead: (id: string) => void;
   resetDemoData: (mode?: 'APPROVED' | 'DRAFT') => void;
+  user?: any;
+  session?: any;
+  signOut?: () => Promise<void>;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);

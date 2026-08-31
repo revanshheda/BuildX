@@ -25,6 +25,7 @@ import {
   DRAFT_HERO_APPLICATION,
 } from './data/hero-data';
 import { AppContext } from './app-context';
+import { supabase, isSupabaseConfigured } from './supabase';
 
 const STORAGE_KEY = 'buildx_sih_state_v1';
 
@@ -38,6 +39,47 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [queries, setQueries] = useState<QueryRecord[]>(VERIFIED_HERO_QUERIES);
   const [inspection, setInspection] = useState<InspectionRecord | null>(VERIFIED_HERO_INSPECTION);
   const [notifications, setNotifications] = useState<NotificationItem[]>(VERIFIED_HERO_NOTIFICATIONS);
+  const [session, setSession] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
+
+  // Subscribe to Supabase Auth State changes
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      if (currentSession) {
+        setSession(currentSession);
+        setUser(currentSession.user);
+        if (currentSession.user?.email) {
+          setBusiness((prev) => ({
+            ...prev,
+            contactEmail: currentSession.user.email || prev.contactEmail,
+            contactName: currentSession.user.user_metadata?.full_name || prev.contactName,
+          }));
+        }
+      }
+    });
+
+    // Listen for auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
+      if (newSession?.user?.email) {
+        setBusiness((prev) => ({
+          ...prev,
+          contactEmail: newSession.user.email || prev.contactEmail,
+          contactName: newSession.user.user_metadata?.full_name || prev.contactName,
+        }));
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   // Load from LocalStorage on mount
   useEffect(() => {
@@ -515,6 +557,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  const signOut = async () => {
+    if (isSupabaseConfigured()) {
+      await supabase.auth.signOut();
+    }
+    setSession(null);
+    setUser(null);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -544,6 +594,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         notifications,
         markNotificationRead,
         resetDemoData,
+        user,
+        session,
+        signOut,
       }}
     >
       {children}
