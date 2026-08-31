@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export default function EntrepreneurDashboardPage() {
-  const { business, application, queries, events } = useAppStore();
+  const { business, application, queries, events, inspection } = useAppStore();
 
   const openQueries = queries.filter((q) => q.status === 'OPEN');
   const isApproved = application.status === 'APPROVED';

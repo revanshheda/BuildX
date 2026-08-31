@@ -194,6 +194,10 @@
   box-shadow: 0 4px 12px rgba(7, 26, 51, 0.08);
 }
 
+.quick-action-card.quick-action-active {
+  border-left-color: #F28C00;
+}
+
 /* Icon container */
 .qa-icon {
   width: 52px;

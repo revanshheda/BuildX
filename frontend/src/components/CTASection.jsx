@@ -1,3 +1,6 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '@/lib/use-app-store';
 import './CTASection.css';
 
 const trustItems = [
@@ -13,7 +16,30 @@ const metrics = [
   { value: '1', label: 'Configured hero pathway' },
 ];
 
-export default function CTASection() {
+export default function CTASection({ onOpenAuth }) {
+  const navigate = useNavigate();
+  const { setPersona } = useAppStore();
+
+  const handleStartEntrepreneur = (e) => {
+    e.preventDefault();
+    if (onOpenAuth) {
+      onOpenAuth('ENTREPRENEUR');
+    } else {
+      setPersona('persona_entrepreneur');
+      navigate('/dashboard');
+    }
+  };
+
+  const handleOfficerLogin = (e) => {
+    e.preventDefault();
+    if (onOpenAuth) {
+      onOpenAuth('OFFICER');
+    } else {
+      setPersona('persona_officer');
+      navigate('/government/dashboard');
+    }
+  };
+
   return (
     <section className="cta-section" id="about">
       <div className="container">
@@ -33,15 +59,23 @@ export default function CTASection() {
                 </p>
 
                 <div className="cta-buttons">
-                  <a href="/register" className="cta-btn-primary" id="cta-entrepreneur-btn">
+                  <button
+                    onClick={handleStartEntrepreneur}
+                    className="cta-btn-primary"
+                    id="cta-entrepreneur-btn"
+                  >
                     Start as Entrepreneur
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
-                  </a>
-                  <a href="/login?role=officer" className="cta-btn-secondary" id="cta-officer-btn">
+                  </button>
+                  <button
+                    onClick={handleOfficerLogin}
+                    className="cta-btn-secondary"
+                    id="cta-officer-btn"
+                  >
                     Government Officer Login
-                  </a>
+                  </button>
                 </div>
               </div>
 

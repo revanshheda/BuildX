@@ -1,27 +1,34 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '@/lib/use-app-store';
 import './CTASection.css';
 
-const footerLinks = {
-  Platform: [
-    { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Features', href: '#features' },
-    { label: 'Sectors Covered', href: '#sectors' },
-    { label: 'Approval Intelligence', href: '#features' },
-  ],
-  Entrepreneurs: [
-    { label: 'Create Account', href: '/register' },
-    { label: 'Business Profile', href: '/profile' },
-    { label: 'My Roadmap', href: '/roadmap' },
-    { label: 'Document Vault', href: '/documents' },
-  ],
-  Government: [
-    { label: 'Officer Login', href: '/login?role=officer' },
-    { label: 'Application Review', href: '/gov/applications' },
-    { label: 'Analytics Dashboard', href: '/gov/analytics' },
-    { label: 'Inspection Scheduler', href: '/gov/inspections' },
-  ],
-};
+export default function Footer({ onOpenAuth }) {
+  const navigate = useNavigate();
+  const { setPersona } = useAppStore();
 
-export default function Footer() {
+  const handleOfficerLogin = (e) => {
+    e.preventDefault();
+    if (onOpenAuth) {
+      onOpenAuth('OFFICER');
+    } else {
+      setPersona('persona_officer');
+      navigate('/government/dashboard');
+    }
+  };
+
+  const handleEntrepreneurAction = (path, e) => {
+    e.preventDefault();
+    setPersona('persona_entrepreneur');
+    navigate(path);
+  };
+
+  const handleGovAction = (path, e) => {
+    e.preventDefault();
+    setPersona('persona_officer');
+    navigate(path);
+  };
+
   return (
     <footer className="footer">
       <div className="container">
@@ -53,17 +60,38 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          {Object.entries(footerLinks).map(([title, items]) => (
-            <div key={title}>
-              <div className="footer-col-title">{title}</div>
-              <div className="footer-links">
-                {items.map((link) => (
-                  <a key={link.label} href={link.href}>{link.label}</a>
-                ))}
-              </div>
+          {/* Platform */}
+          <div>
+            <div className="footer-col-title">Platform</div>
+            <div className="footer-links">
+              <a href="#how-it-works">How It Works</a>
+              <a href="#features">Features</a>
+              <a href="#sectors">Sectors Covered</a>
+              <a href="#about">About Prototype</a>
             </div>
-          ))}
+          </div>
+
+          {/* Entrepreneurs */}
+          <div>
+            <div className="footer-col-title">Entrepreneurs</div>
+            <div className="footer-links">
+              <span onClick={(e) => handleEntrepreneurAction('/business-profile', e)} style={{ cursor: 'pointer' }}>Create Account / Profile</span>
+              <span onClick={(e) => handleEntrepreneurAction('/dashboard', e)} style={{ cursor: 'pointer' }}>Entrepreneur Dashboard</span>
+              <span onClick={(e) => handleEntrepreneurAction('/roadmap', e)} style={{ cursor: 'pointer' }}>My Roadmap</span>
+              <span onClick={(e) => handleEntrepreneurAction('/vault', e)} style={{ cursor: 'pointer' }}>Document Vault</span>
+            </div>
+          </div>
+
+          {/* Government */}
+          <div>
+            <div className="footer-col-title">Government</div>
+            <div className="footer-links">
+              <span onClick={handleOfficerLogin} style={{ cursor: 'pointer' }}>Officer Login</span>
+              <span onClick={(e) => handleGovAction('/government/applications', e)} style={{ cursor: 'pointer' }}>Application Scrutiny</span>
+              <span onClick={(e) => handleGovAction('/government/analytics', e)} style={{ cursor: 'pointer' }}>Analytics Dashboard</span>
+              <span onClick={(e) => handleGovAction('/government/dashboard', e)} style={{ cursor: 'pointer' }}>Single Window Portal</span>
+            </div>
+          </div>
         </div>
 
         {/* Bottom */}

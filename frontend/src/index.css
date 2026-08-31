@@ -5,40 +5,97 @@
   --bg-surface: #ffffff;
   --bg-subtle: #f1f5f9;
   --bg-hover: #e2e8f0;
-  
+  --bg-soft: #f8fafc;
+
   --border-color: #e2e8f0;
   --border-focus: #2563eb;
-  
+
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
-  
+
+  --navy: #071A33;
+  --navy-dark: #051329;
+  --navy-light: #0D1B2A;
+  --navy-border: #173A6A;
+
+  --saffron: #F28C00;
+  --saffron-dark: #D97706;
+  --saffron-light: #FFF7ED;
+
   --primary-blue: #1d4ed8;
   --primary-blue-hover: #1e40af;
   --primary-blue-light: #eff6ff;
   --primary-blue-border: #bfdbfe;
-  
+
   --success-green: #15803d;
   --success-green-bg: #f0fdf4;
   --success-green-border: #bbf7d0;
-  
+
   --warning-amber: #b45309;
   --warning-amber-bg: #fffbeb;
   --warning-amber-border: #fde68a;
-  
+
   --danger-red: #b91c1c;
   --danger-red-bg: #fef2f2;
   --danger-red-border: #fecaca;
-  
+
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
-  
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
-  
+  --radius-xl: 12px;
+
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-full: 9999px;
+
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #F28C00;
+  margin-bottom: 12px;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: '—';
+}
+
+.h2 {
+  font-size: clamp(26px, 3.2vw, 36px);
+  font-weight: 800;
+  color: #0D1B2A;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+}
+
+.lead {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
 }
 
 * {

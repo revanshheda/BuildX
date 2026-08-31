@@ -5,19 +5,19 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Sidebar } from '@/components/layout/Sidebar';
 
 // Code-split pages for faster initial load
-const HomePage = lazy(() => import('@/pages/HomePage'));
-const DashboardPage = lazy(() => import('@/pages/entrepreneur/DashboardPage'));
-const BusinessProfilePage = lazy(() => import('@/pages/entrepreneur/BusinessProfilePage'));
-const IntelligencePage = lazy(() => import('@/pages/entrepreneur/IntelligencePage'));
-const RoadmapPage = lazy(() => import('@/pages/entrepreneur/RoadmapPage'));
-const ApplicationPage = lazy(() => import('@/pages/entrepreneur/ApplicationPage'));
-const VaultPage = lazy(() => import('@/pages/entrepreneur/VaultPage'));
-const QueryPage = lazy(() => import('@/pages/entrepreneur/QueryPage'));
-const IncentivesPage = lazy(() => import('@/pages/entrepreneur/IncentivesPage'));
-const GovDashboardPage = lazy(() => import('@/pages/government/GovDashboardPage'));
-const ApplicationsPage = lazy(() => import('@/pages/government/ApplicationsPage'));
-const ApplicationDetailPage = lazy(() => import('@/pages/government/ApplicationDetailPage'));
-const AnalyticsPage = lazy(() => import('@/pages/government/AnalyticsPage'));
+const LandingPage = lazy(() => import('@/Pages/LandingPage'));
+const DashboardPage = lazy(() => import('@/Pages/entrepreneur/DashboardPage'));
+const BusinessProfilePage = lazy(() => import('@/Pages/entrepreneur/BusinessProfilePage'));
+const IntelligencePage = lazy(() => import('@/Pages/entrepreneur/IntelligencePage'));
+const RoadmapPage = lazy(() => import('@/Pages/entrepreneur/RoadmapPage'));
+const ApplicationPage = lazy(() => import('@/Pages/entrepreneur/ApplicationPage'));
+const VaultPage = lazy(() => import('@/Pages/entrepreneur/VaultPage'));
+const QueryPage = lazy(() => import('@/Pages/entrepreneur/QueryPage'));
+const IncentivesPage = lazy(() => import('@/Pages/entrepreneur/IncentivesPage'));
+const GovDashboardPage = lazy(() => import('@/Pages/government/GovDashboardPage'));
+const ApplicationsPage = lazy(() => import('@/Pages/government/ApplicationsPage'));
+const ApplicationDetailPage = lazy(() => import('@/Pages/government/ApplicationDetailPage'));
+const AnalyticsPage = lazy(() => import('@/Pages/government/AnalyticsPage'));
 
 function PageLoader() {
   return (
@@ -30,7 +30,7 @@ function PageLoader() {
   );
 }
 
-function Layout({ children }: { children: React.ReactNode }) {
+function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="app-container" style={{ flexDirection: 'column' }}>
       <Navbar />
@@ -46,35 +46,139 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function LandingLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      {children}
+    </Suspense>
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <AppProvider>
-        <Layout>
-          <Routes>
-            {/* Home */}
-            <Route path="/" element={<HomePage />} />
+        <Routes>
+          {/* Standalone Landing Page */}
+          <Route
+            path="/"
+            element={
+              <LandingLayout>
+                <LandingPage />
+              </LandingLayout>
+            }
+          />
 
-            {/* Entrepreneur Routes */}
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/business-profile" element={<BusinessProfilePage />} />
-            <Route path="/intelligence" element={<IntelligencePage />} />
-            <Route path="/roadmap" element={<RoadmapPage />} />
-            <Route path="/application/:id" element={<ApplicationPage />} />
-            <Route path="/vault" element={<VaultPage />} />
-            <Route path="/query/:id" element={<QueryPage />} />
-            <Route path="/incentives" element={<IncentivesPage />} />
+          {/* Internal Entrepreneur Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <AppLayout>
+                <DashboardPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/business-profile"
+            element={
+              <AppLayout>
+                <BusinessProfilePage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/intelligence"
+            element={
+              <AppLayout>
+                <IntelligencePage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/roadmap"
+            element={
+              <AppLayout>
+                <RoadmapPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/application/:id"
+            element={
+              <AppLayout>
+                <ApplicationPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/vault"
+            element={
+              <AppLayout>
+                <VaultPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/query/:id"
+            element={
+              <AppLayout>
+                <QueryPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/incentives"
+            element={
+              <AppLayout>
+                <IncentivesPage />
+              </AppLayout>
+            }
+          />
 
-            {/* Government Officer Routes */}
-            <Route path="/government/dashboard" element={<GovDashboardPage />} />
-            <Route path="/government/applications" element={<ApplicationsPage />} />
-            <Route path="/government/applications/:id" element={<ApplicationDetailPage />} />
-            <Route path="/government/analytics" element={<AnalyticsPage />} />
+          {/* Internal Government Officer Routes */}
+          <Route
+            path="/government/dashboard"
+            element={
+              <AppLayout>
+                <GovDashboardPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/government/applications"
+            element={
+              <AppLayout>
+                <ApplicationsPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/government/applications/:id"
+            element={
+              <AppLayout>
+                <ApplicationDetailPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/government/analytics"
+            element={
+              <AppLayout>
+                <AnalyticsPage />
+              </AppLayout>
+            }
+          />
 
-            {/* Fallback */}
-            <Route path="*" element={<HomePage />} />
-          </Routes>
-        </Layout>
+          {/* Fallback */}
+          <Route
+            path="*"
+            element={
+              <LandingLayout>
+                <LandingPage />
+              </LandingLayout>
+            }
+          />
+        </Routes>
       </AppProvider>
     </BrowserRouter>
   );

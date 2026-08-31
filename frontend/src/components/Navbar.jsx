@@ -1,15 +1,39 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppStore } from '@/lib/use-app-store';
 import './Navbar.css';
 
-export default function Navbar() {
+export default function Navbar({ onOpenAuth }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+  const { setPersona } = useAppStore();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    if (onOpenAuth) {
+      onOpenAuth('ENTREPRENEUR');
+    } else {
+      setPersona('persona_entrepreneur');
+      navigate('/dashboard');
+    }
+  };
+
+  const handleGetStarted = (e) => {
+    e.preventDefault();
+    if (onOpenAuth) {
+      onOpenAuth('ENTREPRENEUR');
+    } else {
+      setPersona('persona_entrepreneur');
+      navigate('/business-profile');
+    }
+  };
 
   return (
     <>
@@ -25,13 +49,12 @@ export default function Navbar() {
         <div className="container navbar-inner">
 
           {/* ── LEFT: Ashoka Emblem + BuildX title ── */}
-          <a href="/" className="navbar-brand" aria-label="BuildX — Government of Maharashtra">
-
+          <Link to="/" className="navbar-brand" aria-label="BuildX — Government of Maharashtra">
             {/* Ashoka emblem */}
             <div className="navbar-emblem" aria-hidden="true">
               <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="18" cy="16" r="11" stroke="currentColor" strokeWidth="1.4" fill="none" opacity="0.9"/>
-                <circle cx="18" cy="16" r="2.8" fill="currentColor"/>
+                <circle cx="18" cy="16" r="11" stroke="#F28C00" strokeWidth="1.4" fill="none" opacity="0.9"/>
+                <circle cx="18" cy="16" r="2.8" fill="#F28C00"/>
                 {Array.from({ length: 24 }, (_, i) => {
                   const angle = (i * 15 - 90) * Math.PI / 180;
                   return (
@@ -41,14 +64,14 @@ export default function Navbar() {
                       y1={16 + 3.2 * Math.sin(angle)}
                       x2={18 + 9.5 * Math.cos(angle)}
                       y2={16 + 9.5 * Math.sin(angle)}
-                      stroke="currentColor"
+                      stroke="#F28C00"
                       strokeWidth="0.9"
-                      opacity="0.7"
+                      opacity="0.8"
                     />
                   );
                 })}
-                <rect x="8" y="29" width="20" height="2.2" rx="1.1" fill="currentColor" opacity="0.85"/>
-                <rect x="11" y="32.5" width="14" height="2" rx="1" fill="currentColor" opacity="0.55"/>
+                <rect x="8" y="29" width="20" height="2.2" rx="1.1" fill="#F28C00" opacity="0.85"/>
+                <rect x="11" y="32.5" width="14" height="2" rx="1" fill="#F28C00" opacity="0.6"/>
               </svg>
             </div>
 
@@ -57,7 +80,7 @@ export default function Navbar() {
               <span className="navbar-buildx-name">Build<span className="navbar-x">X</span></span>
               <span className="navbar-gov-sub">Government of Maharashtra</span>
             </div>
-          </a>
+          </Link>
 
           {/* ── CENTER: Nav links ── */}
           <div className="navbar-links">
@@ -71,9 +94,9 @@ export default function Navbar() {
           <div className="navbar-actions">
             {/* Language switcher */}
             <div className="navbar-lang">
-              <a href="#" className="lang-link" lang="hi">हिंदी</a>
+              <span className="lang-link" lang="hi" style={{ cursor: 'pointer' }}>हिंदी</span>
               <span className="lang-sep">|</span>
-              <a href="#" className="lang-link" lang="mr">मराठी</a>
+              <span className="lang-link" lang="mr" style={{ cursor: 'pointer' }}>मराठी</span>
             </div>
 
             <div className="navbar-actions-divider" aria-hidden="true" />
@@ -85,22 +108,30 @@ export default function Navbar() {
             </div>
 
             {/* Sign In */}
-            <a href="/login" className="navbar-btn-login" id="nav-login-btn">
+            <button
+              onClick={handleSignIn}
+              className="navbar-btn-login"
+              id="nav-login-btn"
+            >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                 <polyline points="10 17 15 12 10 7"/>
                 <line x1="15" y1="12" x2="3" y2="12"/>
               </svg>
               Sign In
-            </a>
+            </button>
 
             {/* Register CTA */}
-            <a href="/register" className="navbar-btn-register" id="nav-register-btn">
+            <button
+              onClick={handleGetStarted}
+              className="navbar-btn-register"
+              id="nav-register-btn"
+            >
               Get Started
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
-            </a>
+            </button>
 
             {/* Hamburger */}
             <button
@@ -126,11 +157,11 @@ export default function Navbar() {
               <a href="#about" onClick={() => setMobileOpen(false)}>About</a>
               <div className="mobile-divider" />
               <div className="mobile-lang">
-                <a href="#" lang="hi">हिंदी</a>
-                <a href="#" lang="mr">मराठी</a>
+                <span lang="hi">हिंदी</span>
+                <span lang="mr">मराठी</span>
               </div>
-              <a href="/login" className="mobile-login">Sign In</a>
-              <a href="/register" className="mobile-register">Get Started →</a>
+              <button onClick={(e) => { setMobileOpen(false); handleSignIn(e); }} className="mobile-login" style={{ width: '100%', padding: '10px', background: 'transparent', color: '#fff', cursor: 'pointer', borderRadius: '6px' }}>Sign In</button>
+              <button onClick={(e) => { setMobileOpen(false); handleGetStarted(e); }} className="mobile-register" style={{ width: '100%', padding: '10px', background: '#F28C00', color: '#fff', border: 'none', cursor: 'pointer', borderRadius: '6px', marginTop: '6px' }}>Get Started →</button>
             </div>
           </div>
         )}
