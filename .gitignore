@@ -17,6 +17,8 @@ frontend/dist
 # misc
 .DS_Store
 *.pem
+supabase/.temp
+.temp
 
 # debug
 npm-debug.log*
