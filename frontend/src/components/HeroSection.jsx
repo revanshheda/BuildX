@@ -247,7 +247,7 @@ export default function HeroSection() {
       <div className="hero-stats-bar">
         <div className="container">
           <div className="hero-stats-bar-inner">
-            {stats.map((s, idx) => (
+            {stats.map((s) => (
               <div key={s.label} className="hero-stat">
                 <div className="hero-stat-value">
                   {s.value}
