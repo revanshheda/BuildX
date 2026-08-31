@@ -308,7 +308,7 @@
 .fp-val-row.fail .fp-val-label { color: var(--danger); }
 
 .fp-submit-btn {
-  margin-top: 4px;
+  margin-top: 16px;
   width: 100%;
   padding: 14px;
   background: var(--navy);
@@ -326,9 +326,119 @@
   opacity: 0.6;
 }
 
+/* Distinct feature previews */
+.fp-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.fp-summary-grid-four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.fp-summary-grid > div {
+  min-width: 0;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.fp-summary-grid strong { display: block; color: var(--navy); font-size: 22px; line-height: 1.1; }
+.fp-summary-grid span { display: block; margin-top: 6px; color: var(--text-secondary); font-size: 10.5px; line-height: 1.35; }
+
+.fp-section-label {
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.fp-record-list { overflow: hidden; background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); }
+.fp-record { display: flex; align-items: center; gap: 12px; min-height: 66px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.fp-record:last-child { border-bottom: 0; }
+.fp-record > div { min-width: 0; flex: 1; }
+.fp-record strong { display: block; color: var(--text-primary); font-size: 12.5px; }
+.fp-record > div span { display: block; margin-top: 3px; color: var(--text-muted); font-size: 11px; }
+.fp-record-marker { width: 8px; height: 34px; flex-shrink: 0; border-radius: 2px; background: var(--border-strong); }
+.fp-record-marker.warning { background: var(--warning); }
+.fp-record-marker.navy { background: var(--navy); }
+.fp-record-marker.success { background: var(--success); }
+.fp-record-action { color: var(--navy-mid); font-size: 11px; font-weight: 700; }
+
+.fp-context-strip { display: grid; grid-template-columns: 1fr 1.4fr; gap: 1px; margin-bottom: 16px; overflow: hidden; background: var(--border); border: 1px solid var(--border); border-radius: var(--r-md); }
+.fp-context-strip > div { padding: 13px 15px; background: #fff; }
+.fp-context-strip span { display: block; color: var(--text-muted); font-size: 9px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; }
+.fp-context-strip strong { display: block; margin-top: 4px; color: var(--text-primary); font-size: 11.5px; }
+.fp-index { color: var(--navy-mid); font-size: 10px; font-weight: 800; }
+.fp-state { padding: 4px 8px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 4px; color: var(--text-secondary); font-size: 9.5px; font-weight: 700; }
+.fp-primary-action { width: 100%; margin-top: 16px; padding: 12px; background: var(--navy); border-radius: var(--r-md); color: #fff; font-size: 12px; font-weight: 700; }
+
+.fp-table { overflow: hidden; background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); }
+.fp-table-head, .fp-table-row { display: grid; grid-template-columns: 1.1fr 1.5fr .8fr; gap: 12px; align-items: center; padding: 11px 13px; }
+.fp-table-head { background: var(--bg-subtle); color: var(--text-muted); font-size: 9px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
+.fp-table-row { border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 10.5px; }
+.fp-table-row strong { color: var(--text-primary); font-weight: 600; }
+
+.fp-roadmap-table .fp-table-head,
+.fp-roadmap-table .fp-table-row { grid-template-columns: 1.65fr .75fr .65fr; }
+
+.fp-requirement-name { display: flex; min-width: 0; align-items: center; gap: 9px; }
+.fp-requirement-name strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.fp-status-text {
+  justify-self: start;
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fp-status-text.done { color: #137a3b; background: #f2faf5; border-color: #bfe1ca; }
+.fp-status-text.active { color: var(--navy-mid); background: var(--navy-light); border-color: var(--navy-border); }
+.fp-status-text.review { color: #9a5a05; background: #fffbeb; border-color: #ead49b; }
+.fp-status-text.blocked { color: #b42318; background: #fff6f5; border-color: #efc1bd; }
+
+.fp-check-box {
+  display: flex;
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  border-radius: 5px;
+}
+
+.fp-check-box svg { width: 12px; height: 12px; }
+.fp-check-box.pass { color: #137a3b; background: #f2faf5; border-color: #bfe1ca; }
+.fp-check-box.fail { color: #b42318; background: #fff6f5; border-color: #efc1bd; }
+
+.fp-chart-card { padding: 16px 18px 12px; background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); }
+.fp-chart-heading { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; }
+.fp-chart-heading strong { color: var(--text-primary); font-size: 12.5px; }
+.fp-chart-heading span { color: var(--text-muted); font-size: 9.5px; }
+.fp-bars { display: flex; height: 160px; align-items: flex-end; justify-content: space-around; gap: 16px; padding: 20px 12px 0; border-bottom: 1px solid var(--border); background: repeating-linear-gradient(to bottom, transparent 0, transparent 39px, #edf1f5 40px); }
+.fp-bars span { width: 28px; min-height: 8px; background: var(--navy-mid); border-radius: 2px 2px 0 0; }
+.fp-chart-axis { display: flex; justify-content: space-between; padding-top: 8px; color: var(--text-muted); font-size: 9px; }
+
 @media (max-width: 960px) {
   .features-layout { grid-template-columns: 1fr; }
   .feature-list { position: static; }
   .feat-panel { position: static; }
   .features::after { display: none; }
+}
+
+@media (max-width: 600px) {
+  .fp-summary-grid, .fp-summary-grid-four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fp-context-strip { grid-template-columns: 1fr; }
+  .fp-table { overflow-x: auto; }
+  .fp-table-head, .fp-table-row { min-width: 520px; }
+  .fp-state { display: none; }
 }
