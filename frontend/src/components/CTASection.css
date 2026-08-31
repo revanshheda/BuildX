@@ -255,6 +255,174 @@
 }
 
 /* ========================
+   CTA v5 — institutional closing panel
+   ======================== */
+.cta-section { padding: 96px 0; background: #f7f9fc; }
+
+.cta-inner {
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #cfd8e3;
+  border-top: 4px solid #173a6a;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 36, 86, 0.07);
+  text-align: left;
+}
+
+.cta-content { color: var(--text-primary); }
+
+.cta-badge {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding: 14px 28px;
+  background: #f8fafc;
+  border: 0;
+  border-bottom: 1px solid #dbe3ec;
+  border-radius: 0;
+  color: #536274;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  backdrop-filter: none;
+}
+
+.cta-badge span { color: #7a8796; font-weight: 700; }
+
+.cta-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, .65fr);
+  gap: 64px;
+  align-items: center;
+  padding: 54px 58px 46px;
+}
+
+.cta-kicker {
+  margin-bottom: 13px;
+  color: #c45d08;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+  text-transform: uppercase;
+}
+
+.cta-heading {
+  max-width: 700px;
+  margin-bottom: 18px;
+  color: #10233e;
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -1.4px;
+  line-height: 1.12;
+}
+
+.cta-sub {
+  max-width: 650px;
+  margin: 0 0 30px;
+  color: #5e6b7b;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.cta-buttons { justify-content: flex-start; gap: 11px; margin: 0; }
+
+.cta-btn-primary,
+.cta-btn-secondary {
+  min-height: 46px;
+  padding: 12px 20px;
+  border-radius: 7px;
+  font-size: 13px;
+  box-shadow: none;
+  backdrop-filter: none;
+  transform: none;
+}
+
+.cta-btn-primary { background: #173a6a; border: 1px solid #173a6a; color: #fff; }
+.cta-btn-primary::before { display: none; }
+.cta-btn-primary:hover { background: #102d54; box-shadow: none; transform: none; }
+.cta-btn-secondary { background: #fff; border: 1px solid #bfcbd8; color: #173a6a; }
+.cta-btn-secondary:hover { background: #f4f7fa; border-color: #8799ad; transform: none; }
+
+.cta-scope { padding-left: 30px; border-left: 1px solid #dbe3ec; }
+.cta-scope-title { margin-bottom: 14px; color: #10233e; font-size: 13px; font-weight: 700; }
+
+.cta-metrics {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  margin: 0;
+  background: transparent;
+  border: 1px solid #d5dee8;
+  border-radius: 7px;
+}
+
+.cta-metric {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  align-items: center;
+  padding: 13px 15px;
+  border: 0;
+  border-bottom: 1px solid #e1e7ee;
+  text-align: left;
+}
+
+.cta-metric:last-child { border-bottom: 0; }
+.cta-metric-value {
+  margin: 0;
+  background: none;
+  color: #173a6a;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  -webkit-text-fill-color: currentColor;
+}
+.cta-metric-label { color: #687687; font-size: 9.5px; letter-spacing: .5px; }
+.cta-scope-note { margin-top: 10px; color: #8a96a4; font-size: 10px; }
+
+.cta-trust {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  padding: 0 58px;
+  border-top: 1px solid #dbe3ec;
+}
+
+.cta-trust-item {
+  justify-content: center;
+  gap: 9px;
+  padding: 18px 12px;
+  border-right: 1px solid #e1e7ee;
+  color: #5e6b7b;
+  font-size: 11.5px;
+}
+
+.cta-trust-item:last-child { border-right: 0; }
+.cta-trust-marker { width: 5px; height: 5px; flex-shrink: 0; border-radius: 50%; background: #f28c00; }
+
+@media (max-width: 800px) {
+  .cta-inner { border-radius: 8px; }
+  .cta-main { grid-template-columns: 1fr; gap: 38px; padding: 40px 28px; }
+  .cta-scope { padding: 0; border-left: 0; }
+  .cta-trust { grid-template-columns: repeat(2, 1fr); padding: 0 28px; }
+  .cta-trust-item:nth-child(2) { border-right: 0; }
+  .cta-badge { padding: 13px 20px; }
+}
+
+@media (max-width: 520px) {
+  .cta-section { padding: 72px 0; }
+  .cta-badge span { display: none; }
+  .cta-buttons { align-items: stretch; flex-direction: column; }
+  .cta-btn-primary, .cta-btn-secondary { justify-content: center; }
+  .cta-trust { grid-template-columns: 1fr; }
+  .cta-trust-item { justify-content: flex-start; border-right: 0; border-bottom: 1px solid #e1e7ee; }
+  .cta-trust-item:last-child { border-bottom: 0; }
+}
+
+/* ========================
    Footer v4
    ======================== */
 

@@ -29,11 +29,29 @@ const validationRows = [
   { label: 'Declaration signed', pass: true },
 ];
 
+const dashboardActions = [
+  { label: 'Respond to Process Flow query', meta: 'FSSAI · Action required', tone: 'warning' },
+  { label: 'Inspection scheduled', meta: '05 Sep 2026 · 11:00 AM', tone: 'navy' },
+  { label: 'FSSAI application', meta: 'Under departmental review', tone: 'success' },
+];
+
+const queryItems = [
+  { label: 'Revised Process Flow Required', meta: 'FSSAI · Response due on configured date', state: 'Action required' },
+  { label: 'Site inspection', meta: 'Pune MIDC · 05 Sep 2026, 11:00 AM', state: 'Scheduled' },
+  { label: 'MPCB clarification', meta: 'Response submitted on 02 Sep 2026', state: 'Under review' },
+];
+
+const governmentQueue = [
+  { id: 'APP-MH-2026-00124', business: 'FreshChain Cold Logistics', status: 'Under Review' },
+  { id: 'APP-MH-2026-00119', business: 'Sahyadri Food Processors', status: 'Query Response' },
+  { id: 'APP-MH-2026-00112', business: 'Pune Distribution Hub', status: 'Final Review' },
+];
+
 const features = [
   {
     title: 'Entrepreneur Dashboard',
     desc: 'Single-window command center prioritizing action items, upcoming inspections, and queries.',
-    visual: 'roadmap',
+    visual: 'dashboard',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
@@ -64,7 +82,7 @@ const features = [
   {
     title: 'Query & Inspection',
     desc: 'Respond to officer queries with vault documents and schedule physical site inspections online.',
-    visual: 'validation',
+    visual: 'query',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -74,7 +92,7 @@ const features = [
   {
     title: 'Government Portal',
     desc: 'Unified officer workspace for reviewing, querying, inspecting, and deciding applications.',
-    visual: 'roadmap',
+    visual: 'government',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
@@ -84,7 +102,7 @@ const features = [
   {
     title: 'Analytics & SLA Alerts',
     desc: 'Operational intelligence tracking processing times, pending renewals, and status distributions.',
-    visual: 'validation',
+    visual: 'analytics',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
@@ -94,45 +112,63 @@ const features = [
 ];
 
 function RoadmapVisual() {
+  const completed = roadmapItems.filter((item) => item.status === 'done').length;
+  const inProgress = roadmapItems.filter((item) => item.status === 'active').length;
+
   return (
-    <div className="fp-roadmap">
-      {roadmapItems.map((item) => (
-        <div key={item.name} className="fp-roadmap-item">
-          <div className={`fp-dot ${item.status}`}>
-            {(item.status === 'done' || item.status === 'active') && <CheckIcon />}
+    <div>
+      <div className="fp-summary-grid">
+        <div><strong>{roadmapItems.length}</strong><span>Configured pathways</span></div>
+        <div><strong>{completed}</strong><span>Completed</span></div>
+        <div><strong>{inProgress}</strong><span>Currently in progress</span></div>
+      </div>
+      <div className="fp-section-label">Approval sequence</div>
+      <div className="fp-table fp-roadmap-table">
+        <div className="fp-table-head"><span>Requirement</span><span>Authority</span><span>Status</span></div>
+        {roadmapItems.map((item, index) => (
+          <div className="fp-table-row" key={item.name}>
+            <div className="fp-requirement-name">
+              <span className="fp-index">{String(index + 1).padStart(2, '0')}</span>
+              <strong>{item.name}</strong>
+            </div>
+            <span>{item.authority}</span>
+            <span className={`fp-status-text ${item.status}`}>{item.badge}</span>
           </div>
-          <div className="fp-info">
-            <div className="fp-name">{item.name}</div>
-            <div className="fp-meta">{item.authority}</div>
-          </div>
-          <span className={`badge ${
-            item.status === 'done' ? 'badge-success' :
-            item.status === 'active' ? 'badge-navy' :
-            item.status === 'review' ? 'badge-warning' :
-            'badge-saffron'
-          }`}>
-            {item.badge}
-          </span>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
 
 function ValidationVisual() {
+  const passedChecks = validationRows.filter((row) => row.pass).length;
+  const issueCount = validationRows.length - passedChecks;
+
   return (
     <div>
-      <div className="fp-validation">
+      <div className="fp-summary-grid">
+        <div><strong>{validationRows.length}</strong><span>Checks completed</span></div>
+        <div><strong>{passedChecks}</strong><span>Checks passed</span></div>
+        <div><strong>{issueCount}</strong><span>Blocking issue</span></div>
+      </div>
+      <div className="fp-section-label">Submission readiness</div>
+      <div className="fp-record-list">
         {validationRows.map((row) => (
-          <div key={row.label} className={`fp-val-row ${row.pass ? 'pass' : 'fail'}`}>
-            <div className="fp-val-icon">
+          <div key={row.label} className="fp-record">
+            <span className={`fp-check-box ${row.pass ? 'pass' : 'fail'}`}>
               {row.pass ? <CheckIcon /> : <XIcon />}
+            </span>
+            <div>
+              <strong>{row.label}</strong>
+              <span>{row.pass ? 'Configured check completed' : 'Required before submission'}</span>
             </div>
-            <span className="fp-val-label">{row.label}</span>
+            <span className={`fp-status-text ${row.pass ? 'done' : 'blocked'}`}>
+              {row.pass ? 'Passed' : 'Action required'}
+            </span>
           </div>
         ))}
       </div>
-      <button className="fp-submit-btn" style={{ marginTop: 16 }} disabled>
+      <button className="fp-submit-btn" disabled>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
         </svg>
@@ -140,6 +176,101 @@ function ValidationVisual() {
       </button>
     </div>
   );
+}
+
+function DashboardVisual() {
+  return (
+    <div className="fp-dashboard">
+      <div className="fp-summary-grid">
+        <div><strong>9</strong><span>Approvals identified</span></div>
+        <div><strong>1</strong><span>Action required</span></div>
+        <div><strong>1</strong><span>Application in progress</span></div>
+      </div>
+      <div className="fp-section-label">Current priorities</div>
+      <div className="fp-record-list">
+        {dashboardActions.map((item) => (
+          <div className="fp-record" key={item.label}>
+            <span className={`fp-record-marker ${item.tone}`} />
+            <div><strong>{item.label}</strong><span>{item.meta}</span></div>
+            <span className="fp-record-action">View</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function QueryVisual() {
+  return (
+    <div>
+      <div className="fp-context-strip">
+        <div><span>Application</span><strong>APP-MH-2026-00124</strong></div>
+        <div><span>Business</span><strong>FreshChain Cold Logistics</strong></div>
+      </div>
+      <div className="fp-record-list">
+        {queryItems.map((item, index) => (
+          <div className="fp-record" key={item.label}>
+            <span className="fp-index">{String(index + 1).padStart(2, '0')}</span>
+            <div><strong>{item.label}</strong><span>{item.meta}</span></div>
+            <span className="fp-state">{item.state}</span>
+          </div>
+        ))}
+      </div>
+      <button className="fp-primary-action">Open query response</button>
+    </div>
+  );
+}
+
+function GovernmentVisual() {
+  return (
+    <div>
+      <div className="fp-summary-grid fp-summary-grid-four">
+        <div><strong>3</strong><span>New</span></div>
+        <div><strong>5</strong><span>Under review</span></div>
+        <div><strong>2</strong><span>Queries</span></div>
+        <div><strong>1</strong><span>Inspection</span></div>
+      </div>
+      <div className="fp-section-label">Assigned application queue</div>
+      <div className="fp-table">
+        <div className="fp-table-head"><span>Application</span><span>Business</span><span>Status</span></div>
+        {governmentQueue.map((item) => (
+          <div className="fp-table-row" key={item.id}>
+            <span>{item.id}</span><strong>{item.business}</strong><span>{item.status}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AnalyticsVisual() {
+  const bars = [42, 68, 55, 82, 73, 91];
+  return (
+    <div className="fp-analytics">
+      <div className="fp-summary-grid fp-summary-grid-four">
+        <div><strong>124</strong><span>Applications</span></div>
+        <div><strong>67</strong><span>Approved</span></div>
+        <div><strong>38</strong><span>Under review</span></div>
+        <div><strong>8</strong><span>Target overdue</span></div>
+      </div>
+      <div className="fp-chart-card">
+        <div className="fp-chart-heading"><strong>Application volume</strong><span>Configured demo dataset · 30 days</span></div>
+        <div className="fp-bars" aria-label="Application volume bar chart">
+          {bars.map((height, index) => <span key={index} style={{ height: `${height}%` }} />)}
+        </div>
+        <div className="fp-chart-axis"><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span></div>
+      </div>
+    </div>
+  );
+}
+
+function FeaturePreview({ visual }) {
+  if (visual === 'dashboard') return <DashboardVisual />;
+  if (visual === 'roadmap') return <RoadmapVisual />;
+  if (visual === 'validation') return <ValidationVisual />;
+  if (visual === 'query') return <QueryVisual />;
+  if (visual === 'government') return <GovernmentVisual />;
+  return <AnalyticsVisual />;
 }
 
 export default function Features() {
@@ -171,6 +302,7 @@ export default function Features() {
                 tabIndex={0}
                 onKeyDown={(e) => e.key === 'Enter' && setActiveFeature(i)}
                 id={`feature-tab-${i}`}
+                aria-pressed={activeFeature === i}
               >
                 <div className="feat-item-icon">{f.icon}</div>
                 <div className="feat-item-body">
@@ -194,17 +326,9 @@ export default function Features() {
                   <div className="feat-panel-icon">{active.icon}</div>
                   <span className="feat-panel-name">{active.title}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span className="badge badge-success">Live Preview</span>
-                  <div style={{ display: 'flex', gap: 5 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57' }} />
-                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#febc2e' }} />
-                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c840' }} />
-                  </div>
-                </div>
               </div>
               <div className="feat-panel-body">
-                {active.visual === 'roadmap' ? <RoadmapVisual /> : <ValidationVisual />}
+                <FeaturePreview visual={active.visual} />
               </div>
             </div>
           </div>

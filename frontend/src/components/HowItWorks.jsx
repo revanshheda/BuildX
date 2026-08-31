@@ -4,46 +4,31 @@ const entSteps = [
   {
     num: '1',
     title: 'Build Your Profile',
-    desc: 'Enter business details once — sector, location, project type',
-    tag: 'One-time Setup',
-    color: '#f97316',
-    bg: '#fff7ed',
+    desc: 'Provide your business, project, activity and Maharashtra location details.',
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
   },
   {
     num: '2',
-    title: 'Get Approval Intelligence',
-    desc: 'AI rule engine identifies every licence and approval you need',
-    tag: 'AI-Powered',
-    color: '#1a3a8a',
-    bg: '#eef3ff',
+    title: 'Review Approval Requirements',
+    desc: 'Configured rules identify relevant, conditional and stage-based requirements.',
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>,
   },
   {
     num: '3',
-    title: 'Your Approval Roadmap',
-    desc: 'Ordered pathway with documents, deadlines & status',
-    tag: 'Personalized',
-    color: '#16a34a',
-    bg: '#f0fdf4',
+    title: 'Follow Your Roadmap',
+    desc: 'See the responsible authority, required documents, sequence and next action.',
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>,
   },
   {
     num: '4',
     title: 'Pre-validate & Submit',
-    desc: 'Catch errors before submission — prevent rejections at source',
-    tag: 'Zero Rejections',
-    color: '#7c3aed',
-    bg: '#f5f3ff',
+    desc: 'Check required fields, documents and declarations before sending the application.',
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
   },
   {
     num: '5',
-    title: 'Dashboard & Track',
-    desc: 'Live status, query responses, SLA alerts, and final decisions',
-    tag: 'Real-time',
-    color: '#0891b2',
-    bg: '#ecfeff',
+    title: 'Track and Respond',
+    desc: 'View workflow updates, answer queries, prepare for inspections and see the decision.',
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
   },
 ];
@@ -77,35 +62,32 @@ export default function HowItWorks() {
           <div className="eyebrow">How It Works</div>
           <h2 className="h2">From Profile to Approval in 5 Steps</h2>
           <p className="lead" style={{ maxWidth: 520, margin: '14px auto 0' }}>
-            One connected workflow that replaces confusion, repeated paperwork, and
-            fragmented department visits.
+            A clear, connected process for preparing an application and following it
+            through departmental review.
           </p>
         </div>
 
         {/* Entrepreneur Steps */}
         <div className="hiw-steps-wrapper">
-          <div className="hiw-track">
-            <div className="hiw-track-fill" />
+          <div className="hiw-process-heading">
+            <div>
+              <span className="hiw-process-kicker">Entrepreneur process</span>
+              <h3>One application journey, from preparation to decision</h3>
+            </div>
+            <span className="hiw-process-note">Maharashtra prototype workflow</span>
           </div>
           <div className="hiw-steps">
             {entSteps.map((step) => (
-              <div key={step.num} className="hiw-step">
-                <div
-                  className="hiw-step-icon-wrap"
-                  style={{
-                    background: step.bg,
-                    boxShadow: `0 6px 24px ${step.color}22`,
-                  }}
-                >
-                  <div style={{ color: step.color }}>{step.icon}</div>
-                  <span className="hiw-step-num">{step.num}</span>
+              <article key={step.num} className="hiw-step">
+                <div className="hiw-step-topline">
+                  <span className="hiw-step-num">{step.num.padStart(2, '0')}</span>
+                  <span className="hiw-step-icon-wrap">{step.icon}</span>
                 </div>
                 <div className="hiw-step-body">
-                  <div className="hiw-step-title">{step.title}</div>
-                  <div className="hiw-step-desc">{step.desc}</div>
-                  <div className="hiw-step-tag">{step.tag}</div>
+                  <h4 className="hiw-step-title">{step.title}</h4>
+                  <p className="hiw-step-desc">{step.desc}</p>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
@@ -117,7 +99,7 @@ export default function HowItWorks() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
             </svg>
-            Government Officer Side
+            Department processing
           </div>
           <div className="hiw-divider-line" />
         </div>
@@ -125,12 +107,12 @@ export default function HowItWorks() {
         {/* Gov Steps */}
         <div className="hiw-gov-steps">
           {govSteps.map((step) => (
-            <div key={step.title} className="hiw-gov-card">
+            <article key={step.title} className="hiw-gov-card">
               <div className="hiw-gov-icon">{step.icon}</div>
               <div className="hiw-gov-step-num">{step.num}</div>
               <div className="hiw-gov-title">{step.title}</div>
               <div className="hiw-gov-desc">{step.desc}</div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
